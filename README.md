@@ -3,6 +3,9 @@
 **Track:** Track 3 — Open Innovation
 **Event:** Odoo × HW Tech Club BuildOdoo 2026 Hackathon
 
+**Team repo (day-to-day development):** https://github.com/NadaK110/T07-tech-larpers-odoo-hwud
+**This repo:** full Odoo 19.0 source plus our module, included so the project runs as-is.
+
 This repository contains the full Odoo 19.0 source plus our custom module.
 
 ## 👉 Where our project actually lives
