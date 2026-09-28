@@ -1,0 +1,162 @@
+<odoo>
+    <!-- ============ FORM VIEW (click into one gig) ============ -->
+    <record id="view_gig_posting_form" model="ir.ui.view">
+        <field name="name">gig.posting.form</field>
+        <field name="model">gig.posting</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="open,in_progress,completed"
+                           options="{'clickable': '1'}"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. Calculus tutoring before midterm"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Gig Details">
+                            <label for="category"/>
+                            <div class="o_row">
+                                <field name="category" placeholder="Let AI suggest one"/>
+                                <button name="action_suggest_category" type="object"
+                                        string="AI Suggest" icon="fa-magic"
+                                        class="btn-primary btn-sm"/>
+                            </div>
+                            <field name="poster_id"/>
+                        </group>
+                        <group string="Budget &amp; Timing">
+                            <!-- the budget row was missing its label, that's what
+                                 made it look shifted compared to the category row -->
+                            <label for="budget"/>
+                            <div class="o_row">
+                                <field name="budget"/>
+                                <button name="action_suggest_budget" type="object"
+                                        string="AI Suggest" icon="fa-magic"
+                                        class="btn-primary btn-sm"/>
+                            </div>
+                            <field name="deadline"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description" name="description">
+                            <field name="description" placeholder="Describe what you need done..."/>
+                        </page>
+                        <page string="Applications" name="applications">
+                            <field name="application_ids">
+                                <list editable="bottom">
+                                    <field name="applicant_id"/>
+                                    <field name="message"/>
+                                    <field name="status" widget="badge"
+                                           decoration-warning="status == 'pending'"
+                                           decoration-success="status == 'accepted'"
+                                           decoration-danger="status == 'rejected'"/>
+                                    <button name="action_accept" type="object" icon="fa-check"
+                                            title="Accept" invisible="status != 'pending'"/>
+                                    <button name="action_reject" type="object" icon="fa-times"
+                                            title="Reject" invisible="status != 'pending'"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ============ LIST VIEW (table of gigs) ============ -->
+    <record id="view_gig_posting_list" model="ir.ui.view">
+        <field name="name">gig.posting.list</field>
+        <field name="model">gig.posting</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="category" widget="badge"
+                       decoration-info="category in ('tutoring', 'research', 'writing', 'translation')"
+                       decoration-success="category == 'programming'"
+                       decoration-warning="category in ('graphic_design', 'design', 'photography', 'video_editing', 'music')"
+                       decoration-danger="category in ('marketing', 'event_support')"/>
+                <field name="poster_id" optional="show"/>
+                <field name="deadline"/>
+                <field name="budget" sum="Total Budget"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'open'"
+                       decoration-warning="state == 'in_progress'"
+                       decoration-success="state == 'completed'"
+                       decoration-danger="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ============ KANBAN VIEW (cards by status) ============ -->
+    <record id="view_gig_posting_kanban" model="ir.ui.view">
+        <field name="name">gig.posting.kanban</field>
+        <field name="model">gig.posting</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" group_create="false">
+                <templates>
+                    <t t-name="card">
+                        <field name="name" class="fw-bold fs-5"/>
+                        <field name="category" widget="badge"
+                               decoration-info="category in ('tutoring', 'research', 'writing', 'translation')"
+                               decoration-success="category == 'programming'"
+                               decoration-warning="category in ('graphic_design', 'design', 'photography', 'video_editing', 'music')"
+                               decoration-danger="category in ('marketing', 'event_support')"/>
+                        <div class="d-flex justify-content-between mt-2">
+                            <span>Budget: <field name="budget"/></span>
+                            <field name="deadline"/>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- ============ SEARCH VIEW (filters + group by) ============ -->
+    <record id="view_gig_posting_search" model="ir.ui.view">
+        <field name="name">gig.posting.search</field>
+        <field name="model">gig.posting</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="category"/>
+                <field name="poster_id"/>
+                <filter string="Open" name="filter_open" domain="[('state', '=', 'open')]"/>
+                <filter string="In Progress" name="filter_in_progress" domain="[('state', '=', 'in_progress')]"/>
+                <filter string="Completed" name="filter_completed" domain="[('state', '=', 'completed')]"/>
+                <separator/>
+                <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                <filter string="Category" name="group_category" context="{'group_by': 'category'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- ============ GRAPH VIEW (gigs by category chart) ============ -->
+    <record id="view_gig_posting_graph" model="ir.ui.view">
+        <field name="name">gig.posting.graph</field>
+        <field name="model">gig.posting</field>
+        <field name="arch" type="xml">
+            <graph string="Gigs by Category" type="bar">
+                <field name="category"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- ============ ACTION (what opens when you click the menu) ============ -->
+    <record id="action_gig_posting" model="ir.actions.act_window">
+        <field name="name">Gigs</field>
+        <field name="res_model">gig.posting</field>
+        <field name="view_mode">kanban,list,graph,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Post your first gig!</p>
+            <p>Need tutoring, design work or an errand done? Post it here and other students can apply.</p>
+        </field>
+    </record>
+
+    <!-- ============ MENUS (sidebar / top bar) ============ -->
+    <menuitem id="menu_gig_marketplace_root" name="Gig Marketplace"/>
+    <menuitem id="menu_gig_posting" name="Gigs" parent="menu_gig_marketplace_root" action="action_gig_posting"/>
+</odoo>

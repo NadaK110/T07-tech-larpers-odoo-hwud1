@@ -1,0 +1,223 @@
+<odoo>
+    <!-- demo data so the app looks like a real marketplace in the demo video.
+         noupdate="1" means it only gets created once and won't overwrite
+         anything we change by hand later -->
+    <data noupdate="1">
+
+        <!-- students (posters + applicants) -->
+        <record id="demo_student_aisha" model="res.partner">
+            <field name="name">Aisha Khan</field>
+        </record>
+        <record id="demo_student_omar" model="res.partner">
+            <field name="name">Omar Farooq</field>
+        </record>
+        <record id="demo_student_layla" model="res.partner">
+            <field name="name">Layla Hassan</field>
+        </record>
+        <record id="demo_student_yusuf" model="res.partner">
+            <field name="name">Yusuf Rahman</field>
+        </record>
+        <record id="demo_student_sara" model="res.partner">
+            <field name="name">Sara Ahmed</field>
+        </record>
+        <record id="demo_student_rohan" model="res.partner">
+            <field name="name">Rohan Mehta</field>
+        </record>
+        <record id="demo_student_priya" model="res.partner">
+            <field name="name">Priya Nair</field>
+        </record>
+        <record id="demo_student_hamdan" model="res.partner">
+            <field name="name">Hamdan Al Suwaidi</field>
+        </record>
+        <record id="demo_student_mariam" model="res.partner">
+            <field name="name">Mariam Saleh</field>
+        </record>
+        <record id="demo_student_daniel" model="res.partner">
+            <field name="name">Daniel Thomas</field>
+        </record>
+        <record id="demo_student_fatima" model="res.partner">
+            <field name="name">Fatima Zahra</field>
+        </record>
+        <record id="demo_student_arjun" model="res.partner">
+            <field name="name">Arjun Pillai</field>
+        </record>
+
+        <!-- gig: Python tutoring for Intro to Programming -->
+        <record id="demo_gig_python" model="gig.posting">
+            <field name="name">Python tutoring for Intro to Programming</field>
+            <field name="description">I'm struggling with loops and functions in my intro programming course. Looking for someone to go through 3 practice questions with me before Thursday's lab test. Library or Teams is fine.</field>
+            <field name="category">tutoring</field>
+            <field name="budget">100</field>
+            <field name="deadline" eval="(DateTime.today() + relativedelta(days=4)).strftime('%Y-%m-%d')"/>
+            <field name="state">open</field>
+            <field name="poster_id" ref="demo_student_aisha"/>
+        </record>
+        <record id="demo_app_python_1" model="gig.application">
+            <field name="gig_id" ref="demo_gig_python"/>
+            <field name="applicant_id" ref="demo_student_rohan"/>
+            <field name="message">Got an A in intro programming last year, I can go through loops and functions with you on Wednesday evening.</field>
+            <field name="status">pending</field>
+        </record>
+        <record id="demo_app_python_2" model="gig.application">
+            <field name="gig_id" ref="demo_gig_python"/>
+            <field name="applicant_id" ref="demo_student_priya"/>
+            <field name="message">I TA for first-years in the coding club, happy to do a 1.5 hour session on Teams.</field>
+            <field name="status">pending</field>
+        </record>
+
+        <!-- gig: Design a poster for Diwali night -->
+        <record id="demo_gig_diwali" model="gig.posting">
+            <field name="name">Design a poster for Diwali night</field>
+            <field name="description">The Indian Cultural Society needs an A3 poster and an Instagram post for Diwali night on campus. Colourful, festive, and needs the date, venue and ticket link.</field>
+            <field name="category">graphic_design</field>
+            <field name="budget">120</field>
+            <field name="deadline" eval="(DateTime.today() + relativedelta(days=6)).strftime('%Y-%m-%d')"/>
+            <field name="state">in_progress</field>
+            <field name="poster_id" ref="demo_student_priya"/>
+        </record>
+        <record id="demo_app_diwali_1" model="gig.application">
+            <field name="gig_id" ref="demo_gig_diwali"/>
+            <field name="applicant_id" ref="demo_student_sara"/>
+            <field name="message">I've designed posters for 3 society events this year, can share my Behance. Can deliver drafts in 2 days.</field>
+            <field name="status">accepted</field>
+        </record>
+        <record id="demo_app_diwali_2" model="gig.application">
+            <field name="gig_id" ref="demo_gig_diwali"/>
+            <field name="applicant_id" ref="demo_student_daniel"/>
+            <field name="message">I can do this in Canva by the weekend.</field>
+            <field name="status">rejected</field>
+        </record>
+
+        <!-- gig: Portfolio website for my photography -->
+        <record id="demo_gig_website" model="gig.posting">
+            <field name="name">Portfolio website for my photography</field>
+            <field name="description">Need a simple one-page portfolio site to show my photography work, with a gallery and a contact form. Should work on mobile.</field>
+            <field name="category">programming</field>
+            <field name="budget">250</field>
+            <field name="deadline" eval="(DateTime.today() + relativedelta(days=10)).strftime('%Y-%m-%d')"/>
+            <field name="state">open</field>
+            <field name="poster_id" ref="demo_student_mariam"/>
+        </record>
+        <record id="demo_app_website_1" model="gig.application">
+            <field name="gig_id" ref="demo_gig_website"/>
+            <field name="applicant_id" ref="demo_student_arjun"/>
+            <field name="message">I build sites with React and can host it free on GitHub Pages. Can show you 2 sites I've made.</field>
+            <field name="status">pending</field>
+        </record>
+        <record id="demo_app_website_2" model="gig.application">
+            <field name="gig_id" ref="demo_gig_website"/>
+            <field name="applicant_id" ref="demo_student_omar"/>
+            <field name="message">I can make it with HTML/CSS, done within a week.</field>
+            <field name="status">pending</field>
+        </record>
+
+        <!-- gig: Proofread my dissertation chapter -->
+        <record id="demo_gig_proofread" model="gig.posting">
+            <field name="name">Proofread my dissertation chapter</field>
+            <field name="description">Final-year project literature review, about 4,000 words. Need grammar and flow checked and Harvard referencing looked over.</field>
+            <field name="category">writing</field>
+            <field name="budget">80</field>
+            <field name="deadline" eval="(DateTime.today() + relativedelta(days=-3)).strftime('%Y-%m-%d')"/>
+            <field name="state">completed</field>
+            <field name="poster_id" ref="demo_student_hamdan"/>
+        </record>
+        <record id="demo_app_proofread_1" model="gig.application">
+            <field name="gig_id" ref="demo_gig_proofread"/>
+            <field name="applicant_id" ref="demo_student_layla"/>
+            <field name="message">English Lit minor, I proofread for the student newspaper. Can turn it around in 2 days.</field>
+            <field name="status">accepted</field>
+        </record>
+
+        <!-- gig: Edit a 60-second reel for the coding club -->
+        <record id="demo_gig_reel" model="gig.posting">
+            <field name="name">Edit a 60-second reel for the coding club</field>
+            <field name="description">We filmed our hackathon workshop and need a short reel for Instagram: cut the best clips, add captions and music.</field>
+            <field name="category">video_editing</field>
+            <field name="budget">150</field>
+            <field name="deadline" eval="(DateTime.today() + relativedelta(days=5)).strftime('%Y-%m-%d')"/>
+            <field name="state">open</field>
+            <field name="poster_id" ref="demo_student_daniel"/>
+        </record>
+        <record id="demo_app_reel_1" model="gig.application">
+            <field name="gig_id" ref="demo_gig_reel"/>
+            <field name="applicant_id" ref="demo_student_yusuf"/>
+            <field name="message">I edit reels in CapCut and Premiere, can send you 2 examples.</field>
+            <field name="status">pending</field>
+        </record>
+
+        <!-- gig: Graduation photoshoot on campus -->
+        <record id="demo_gig_grad" model="gig.posting">
+            <field name="name">Graduation photoshoot on campus</field>
+            <field name="description">Looking for someone to take graduation photos for me and 2 friends around campus, about 1 hour, edited photos needed within a week.</field>
+            <field name="category">photography</field>
+            <field name="budget">200</field>
+            <field name="deadline" eval="(DateTime.today() + relativedelta(days=12)).strftime('%Y-%m-%d')"/>
+            <field name="state">open</field>
+            <field name="poster_id" ref="demo_student_fatima"/>
+        </record>
+        <record id="demo_app_grad_1" model="gig.application">
+            <field name="gig_id" ref="demo_gig_grad"/>
+            <field name="applicant_id" ref="demo_student_mariam"/>
+            <field name="message">I have my own camera and have done 5 grad shoots, can send my portfolio.</field>
+            <field name="status">pending</field>
+        </record>
+
+        <!-- gig: Translate event flyer into Arabic -->
+        <record id="demo_gig_arabic" model="gig.posting">
+            <field name="name">Translate event flyer into Arabic</field>
+            <field name="description">Short flyer for a career fair (about 150 words) needs an accurate Arabic translation that sounds natural.</field>
+            <field name="category">translation</field>
+            <field name="budget">60</field>
+            <field name="deadline" eval="(DateTime.today() + relativedelta(days=2)).strftime('%Y-%m-%d')"/>
+            <field name="state">in_progress</field>
+            <field name="poster_id" ref="demo_student_rohan"/>
+        </record>
+        <record id="demo_app_arabic_1" model="gig.application">
+            <field name="gig_id" ref="demo_gig_arabic"/>
+            <field name="applicant_id" ref="demo_student_hamdan"/>
+            <field name="message">Native Arabic speaker, I can do it today.</field>
+            <field name="status">accepted</field>
+        </record>
+        <record id="demo_app_arabic_2" model="gig.application">
+            <field name="gig_id" ref="demo_gig_arabic"/>
+            <field name="applicant_id" ref="demo_student_fatima"/>
+            <field name="message">I can translate it by tomorrow.</field>
+            <field name="status">rejected</field>
+        </record>
+
+        <!-- gig: Ushers needed for tech talk -->
+        <record id="demo_gig_usher" model="gig.posting">
+            <field name="name">Ushers needed for tech talk</field>
+            <field name="description">Need 2 people to help with registration and seating for a 150-person tech talk in the auditorium, 5pm to 8pm.</field>
+            <field name="category">event_support</field>
+            <field name="budget">90</field>
+            <field name="deadline" eval="(DateTime.today() + relativedelta(days=7)).strftime('%Y-%m-%d')"/>
+            <field name="state">open</field>
+            <field name="poster_id" ref="demo_student_omar"/>
+        </record>
+        <record id="demo_app_usher_1" model="gig.application">
+            <field name="gig_id" ref="demo_gig_usher"/>
+            <field name="applicant_id" ref="demo_student_aisha"/>
+            <field name="message">Free that evening, I've volunteered at 2 campus events before.</field>
+            <field name="status">pending</field>
+        </record>
+        <record id="demo_app_usher_2" model="gig.application">
+            <field name="gig_id" ref="demo_gig_usher"/>
+            <field name="applicant_id" ref="demo_student_arjun"/>
+            <field name="message">I can help with registration.</field>
+            <field name="status">pending</field>
+        </record>
+
+        <!-- gig: Research help for marketing survey -->
+        <record id="demo_gig_survey" model="gig.posting">
+            <field name="name">Research help for marketing survey</field>
+            <field name="description">Need help designing a short Google Forms survey about student spending habits and summarising the results in a few charts.</field>
+            <field name="category">research</field>
+            <field name="budget">70</field>
+            <field name="deadline" eval="(DateTime.today() + relativedelta(days=-1)).strftime('%Y-%m-%d')"/>
+            <field name="state">cancelled</field>
+            <field name="poster_id" ref="demo_student_sara"/>
+        </record>
+
+    </data>
+</odoo>

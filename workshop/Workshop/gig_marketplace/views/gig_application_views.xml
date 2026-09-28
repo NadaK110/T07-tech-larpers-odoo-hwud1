@@ -1,0 +1,108 @@
+<odoo>
+    <!-- form view for one application - status bar at the top so the gig owner
+         can click Pending / Accepted / Rejected -->
+    <record id="view_gig_application_form" model="ir.ui.view">
+        <field name="name">gig.application.form</field>
+        <field name="model">gig.application</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_accept" type="object" string="Accept"
+                            class="btn-primary" invisible="status != 'pending'"/>
+                    <button name="action_reject" type="object" string="Reject"
+                            invisible="status != 'pending'"/>
+                    <!-- NEW: re-run the AI match score -->
+                    <button name="action_ai_match_score" type="object" string="AI Match Score"/>
+                    <field name="status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="applicant_id"/>
+                        <h1>
+                            <field name="applicant_id" placeholder="Who's applying?"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="gig_id"/>
+                        </group>
+                        <!-- NEW: AI match result -->
+                        <group string="AI Match">
+                            <field name="match_score" widget="progressbar"/>
+                            <field name="match_reason"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Message" name="message">
+                            <field name="message" placeholder="Why are you a good fit for this gig?"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- list of all applications across every gig.
+         same badge colors idea as the gigs list so it feels consistent -->
+    <record id="view_gig_application_list" model="ir.ui.view">
+        <field name="name">gig.application.list</field>
+        <field name="model">gig.application</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="status == 'rejected'">
+                <field name="applicant_id"/>
+                <field name="gig_id"/>
+                <!-- NEW: score bar + short AI reason -->
+                <field name="match_score" widget="progressbar"/>
+                <field name="match_reason" optional="show"/>
+                <field name="message" optional="show"/>
+                <field name="status" widget="badge"
+                       decoration-warning="status == 'pending'"
+                       decoration-success="status == 'accepted'"
+                       decoration-danger="status == 'rejected'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- search for applications - filter by status, or group them by gig
+         so you can see who applied to what -->
+    <record id="view_gig_application_search" model="ir.ui.view">
+        <field name="name">gig.application.search</field>
+        <field name="model">gig.application</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="applicant_id"/>
+                <field name="gig_id"/>
+                <filter string="Pending" name="filter_pending" domain="[('status', '=', 'pending')]"/>
+                <filter string="Accepted" name="filter_accepted" domain="[('status', '=', 'accepted')]"/>
+                <filter string="Rejected" name="filter_rejected" domain="[('status', '=', 'rejected')]"/>
+                <!-- NEW: quick filter for strong matches -->
+                <filter string="Strong Match (70+)" name="filter_strong" domain="[('match_score', '>=', 70)]"/>
+                <separator/>
+                <filter string="Gig" name="group_gig" context="{'group_by': 'gig_id'}"/>
+                <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- opens the applications screen from the menu -->
+    <record id="action_gig_application" model="ir.actions.act_window">
+        <field name="name">Applications</field>
+        <field name="res_model">gig.application</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No applications yet</p>
+            <p>When students apply to a gig, their applications show up here.</p>
+        </field>
+    </record>
+   <record id="action_server_rescore_applications" model="ir.actions.server">
+       <field name="name">AI Re-score Selected</field>
+       <field name="model_id" ref="model_gig_application"/>
+       <field name="binding_model_id" ref="model_gig_application"/>
+       <field name="binding_view_types">list</field>
+       <field name="state">code</field>
+       <field name="code">records.action_ai_match_score()</field>
+   </record>
+    <!-- Applications menu, sits next to Gigs in the top bar -->
+    <menuitem id="menu_gig_application" name="Applications"
+              parent="menu_gig_marketplace_root" action="action_gig_application" sequence="20"/>
+</odoo>
